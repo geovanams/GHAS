@@ -19,14 +19,42 @@ public class SystemHealthCheck : IHealthCheck
     {
         var request = _httpContextAccessor.HttpContext?.Request;
         string drive = request.Query.ContainsKey("drive") ? request.Query["drive"].ToString().ToUpper() : "C";
-        var allowedDrives = new HashSet<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-        if (!allowedDrives.Contains(drive))
+        var allowedDrives = new Dictionary<string, string>
+        {
+            { "A", "/C fsutil volume diskfree A:" },
+            { "B", "/C fsutil volume diskfree B:" },
+            { "C", "/C fsutil volume diskfree C:" },
+            { "D", "/C fsutil volume diskfree D:" },
+            { "E", "/C fsutil volume diskfree E:" },
+            { "F", "/C fsutil volume diskfree F:" },
+            { "G", "/C fsutil volume diskfree G:" },
+            { "H", "/C fsutil volume diskfree H:" },
+            { "I", "/C fsutil volume diskfree I:" },
+            { "J", "/C fsutil volume diskfree J:" },
+            { "K", "/C fsutil volume diskfree K:" },
+            { "L", "/C fsutil volume diskfree L:" },
+            { "M", "/C fsutil volume diskfree M:" },
+            { "N", "/C fsutil volume diskfree N:" },
+            { "O", "/C fsutil volume diskfree O:" },
+            { "P", "/C fsutil volume diskfree P:" },
+            { "Q", "/C fsutil volume diskfree Q:" },
+            { "R", "/C fsutil volume diskfree R:" },
+            { "S", "/C fsutil volume diskfree S:" },
+            { "T", "/C fsutil volume diskfree T:" },
+            { "U", "/C fsutil volume diskfree U:" },
+            { "V", "/C fsutil volume diskfree V:" },
+            { "W", "/C fsutil volume diskfree W:" },
+            { "X", "/C fsutil volume diskfree X:" },
+            { "Y", "/C fsutil volume diskfree Y:" },
+            { "Z", "/C fsutil volume diskfree Z:" }
+        };
+        if (!allowedDrives.ContainsKey(drive))
         {
             drive = "C";
         }
         Process process = new Process();
         process.StartInfo.FileName = @"cmd.exe";
-        process.StartInfo.Arguments = $"/C fsutil volume diskfree {drive}:";
+        process.StartInfo.Arguments = allowedDrives[drive];
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.UseShellExecute = false;
         process.Start();
